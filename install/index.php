@@ -1,9 +1,10 @@
 <?php
-
 use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
+use Davidok95\Psk\PskRatesInEuroTable;
+use Davidok95\Psk\PskDestinationsTable;
 
 \Bitrix\Main\Loader::includeModule('iblock');
 Loc::loadMessages(__FILE__);
@@ -44,60 +45,22 @@ class davidok95_psk extends CModule
 
     public function installDB()
     {
-		global $DB;
-
-		$this->installIblockType();
-		$this->installRatesInEuroTable();
+		if (Loader::includeModule($this->MODULE_ID))
+        {
+            PskRatesInEuroTable::getEntity()->createDbTable();
+            PskDestinationsTable::getEntity()->createDbTable();
+        }
 	}
 
     public function uninstallDB()
     {
 		global $DB;
 
-		$DB->StartTransaction();
-		if( ! CIBlockType::Delete("davidok95_psk"))
-		{
-			$DB->Rollback();
-			echo "Delete error !";
-		}
-		$DB->Commit();
-    }
-
-	public function installRatesInEuroTable()
-	{
-	}
-
-	public function installIblockType()
-	{
-		global $DB;
-		$arFields = array(
-			"ID" => "davidok95_psk",
-			"SECTIONS" => "N",
-			"IN_RSS" => "N",
-			"SORT" => 100,
-			"LANG" => array(
-				"en" => array(
-					"NAME" => "Delivery PSK",
-					"SECTION_NAME" => "",
-					"ELEMENT_NAME" => "Элемент"
-				),
-				"ru" => array(
-					"NAME" => "Доставка PSK",
-					"SECTION_NAME" => "",
-					"ELEMENT_NAME" => "Element"
-				)
-			)
-		);
-		$obBlocktype = new CIBlockType;
-		$DB->StartTransaction();
-		$res = $obBlocktype->Add($arFields);
-		if( ! $res)
-		{
-		   $DB->Rollback();
-		   echo "Error: " . $obBlocktype->LAST_ERROR . "<br>";
-		   die();
-		}
-		else
-			$DB->Commit();
+		if (Loader::includeModule($this->MODULE_ID))
+        {
+            $connection = Application::getInstance()->getConnection();
+            $connection->dropTable(PskRatesInEuroTable::getTableName());
+            $connection->dropTable(PskDestinationsTable::getTableName());
+        }
 	}
 }
