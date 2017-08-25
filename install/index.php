@@ -45,10 +45,17 @@ class davidok95_psk extends CModule
 
     public function installDB()
     {
+		global $DB;
+		$application = \Bitrix\Main\Application::getInstance();
+		$rootDir = $application->getDocumentRoot();
+
 		if (Loader::includeModule($this->MODULE_ID))
         {
             PskRatesInEuroTable::getEntity()->createDbTable();
             PskDestinationsTable::getEntity()->createDbTable();
+
+			$DB->RunSqlBatch($rootDir . "/bitrix/modules/davidok95.psk/mysql/ratesineuro.sql");
+			$DB->RunSqlBatch($rootDir . "/bitrix/modules/davidok95.psk/mysql/destinations.sql");
         }
 	}
 
