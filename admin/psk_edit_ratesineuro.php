@@ -63,8 +63,8 @@ if (CheckFilter())
 		$arFilter["ID"] = $find_id;
 	if ($find_weight)
 		$arFilter["WEIGHT"] = $find_weight;
-	if ($find_zone)
-		$arFilter["ZONE"] = $find_zone;
+	if ($find_zone != "")
+		$arFilter["ZONE"] = "$find_zone";
 	if ($find_price)
 		$arFilter["PRICE"] = $find_price;
 }
@@ -148,6 +148,10 @@ if(($arID = $lAdmin->GroupAction()) && $POST_RIGHT=="W")
     }
 	 */
 }
+
+echo '<pre style="text-align: left;">';
+print_r($arFilter);
+echo '</pre>';
 
 // выберем список элементов
 $order = mb_strtoupper($order);
