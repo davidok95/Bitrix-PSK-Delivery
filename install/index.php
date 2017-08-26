@@ -35,13 +35,25 @@ class davidok95_psk extends CModule
     {
         ModuleManager::registerModule($this->MODULE_ID);
         $this->installDB();
+		$this->installFiles();
     }
 
     public function doUninstall()
     {
 		$this->uninstallDB();
+		$this->unInstallFiles();
         ModuleManager::unRegisterModule($this->MODULE_ID);
     }
+
+	public function installFiles()
+	{
+		CopyDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/admin", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin", true, true);
+	}
+
+	public function unInstallFiles()
+	{
+		DeleteDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/admin/", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin");
+	}
 
     public function installDB()
     {
