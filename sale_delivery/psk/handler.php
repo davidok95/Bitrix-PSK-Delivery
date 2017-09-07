@@ -49,10 +49,6 @@ class PskHandler extends Base
 			$zone = $arDest["ZONE"];
 		}
 
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/log.txt', "CityName:" . print_r($cityName,true) . "\n", FILE_APPEND);
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/log.txt', "Zone:" . print_r($zone,true) . "\n", FILE_APPEND);
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/log.txt', "Weight:" . print_r($weight,true) . "\n", FILE_APPEND);
-
 		// get price euro
 		$priceEuro = false;
 		if ($zone !== false)
