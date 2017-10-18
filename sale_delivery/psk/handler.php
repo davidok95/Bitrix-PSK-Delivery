@@ -20,13 +20,20 @@ class PskHandler extends Base
 		return "Доставка, стоимость которой зависит только от веса и местоволожения";
 	}
 
+	public function getDescription()
+	{
+		return "eeeeeeeeeeeee";
+	}
+
 	protected function getCity($shipment) {
 		$result = 0;
 	
 		$order = $shipment->getCollection()->getOrder();
 		$propertyCollection = $order->getPropertyCollection();
-		$somePropValue = $propertyCollection->getItemByOrderPropertyId(5); // http://euro.home/bitrix/admin/sale_order_props.php?lang=ru - тут ID определять
-		$city  = $somePropValue->getValue();
+		$somePropValue = $propertyCollection->getItemByOrderPropertyId(6); // http://euro.home/bitrix/admin/sale_order_props.php?lang=ru - тут ID определять
+		$city = false;
+		if ($somePropValue)
+			$city  = $somePropValue->getValue();
 	
 		return $city;
 	}
@@ -37,12 +44,18 @@ class PskHandler extends Base
 		$price = floatval($this->config["MAIN"]["PRICE"]);
 		$weight = ceil(floatval($shipment->getWeight()) / 1000);
 
-		if (isset($_POST) && isset($_POST["ORDER_PROP_6"]))
+		$cityName = $this->getCity($shipment);
+		if ( ! $cityName)
 		{
-			$city = $_POST["ORDER_PROP_6"];
-			$trnParams = array("replace_space"=>"-","replace_other"=>"-");
-			$cityName = \CUtil::translit($city,"ru",$arParams);
+			if (isset($_POST) && isset($_POST["ORDER_PROP_6"]))
+			{
+				$cityName = $_POST["ORDER_PROP_6"];
+			}
 		}
+
+		// name to translit
+		$trnParams = array("replace_space"=>"-","replace_other"=>"-");
+		$cityName = ($cityName ? \CUtil::translit($cityName,"ru",$arParams) : "");
 
 		if ($cityName == "")
 			return false;
