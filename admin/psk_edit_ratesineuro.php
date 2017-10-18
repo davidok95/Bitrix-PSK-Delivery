@@ -149,10 +149,6 @@ if(($arID = $lAdmin->GroupAction()) && $POST_RIGHT=="W")
 	 */
 }
 
-echo '<pre style="text-align: left;">';
-print_r($arFilter);
-echo '</pre>';
-
 // выберем список элементов
 $order = mb_strtoupper($order);
 $rsData = PskRatesInEuroTable::getList(array(

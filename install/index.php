@@ -49,12 +49,14 @@ class davidok95_psk extends CModule
 	{
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/admin", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin", true, true);
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/sale_delivery", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/php_interface/include/sale_delivery", true, true);
+		CopyDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/sale_delivery", $_SERVER["DOCUMENT_ROOT"] . "/local/php_interface/include/sale_delivery", true, true);
 	}
 
 	public function unInstallFiles()
 	{
 		DeleteDirFiles($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/{$this->MODULE_ID}/install/admin/", $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin");
 		DeleteDirFilesEx("/bitrix/php_interface/include/sale_delivery/psk");
+		DeleteDirFilesEx("/local/php_interface/include/sale_delivery/psk");
 	}
 
     public function installDB()
