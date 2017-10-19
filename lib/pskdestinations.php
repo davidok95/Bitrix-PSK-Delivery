@@ -47,6 +47,10 @@ class PskDestinationsTable extends DataManager
                 "required" => true,
                 "title" => Loc::getMessage("DAVIDOK95_PSK_ZIP_CODE"),
             )),
+			new StringField("PERIOD", array(
+                "required" => true,
+                "title" => Loc::getMessage("DAVIDOK95_PSK_PERIOD"),
+            )),
         );
     }
 }

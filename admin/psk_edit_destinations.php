@@ -73,6 +73,8 @@ if (CheckFilter())
 		$arFilter["ZONE"] = $find_zone;
 	if ($find_zip_code)
 		$arFilter["ZIP_CODE"] = $find_zip_code;
+	if ($find_zip_code)
+		$arFilter["PERIOD"] = $find_zip_code;
 }
 
 // сохранение отредактированных элементов
@@ -209,6 +211,13 @@ $lAdmin->AddHeaders(array(
 		"sort"     => "ZIP_CODE",
 		"default"  =>true,
 	),
+	array(
+		"id"       => "PERIOD",
+		"content"  => Loc::getMessage("DAVIDOK95_PSK_DESTINATIONS_PERIOD"),
+		"sort"     => "PERIOD",
+		"default"  =>true,
+	),
+
 ));
 
 

@@ -15,14 +15,24 @@ class PskHandler extends Base
 		return "Доставка PSK";
 	}
 
+	public static function getPeriodByTownName($ruTownName)
+	{
+		$trnParams = array("replace_space"=>"-","replace_other"=>"-");
+		$cityName = ($ruTownName ? \CUtil::translit($ruTownName,"ru",$arParams) : "");
+
+		$zone = false;
+		$rsDest = PskDestinationsTable::getList(array(
+			"filter" => array("CITY" => $cityName),
+		));
+		if ($arDest = $rsDest->Fetch())
+			return "до " . $arDest["PERIOD"] . " дней";
+
+		return "";
+	}
+
 	public static function getClassDescription()
 	{
 		return "Доставка, стоимость которой зависит только от веса и местоволожения";
-	}
-
-	public function getDescription()
-	{
-		return "eeeeeeeeeeeee";
 	}
 
 	protected function getCity($shipment) {
@@ -34,12 +44,15 @@ class PskHandler extends Base
 		$city = false;
 		if ($somePropValue)
 			$city  = $somePropValue->getValue();
+
+		
 	
 		return $city;
 	}
 
 	protected function calculateConcrete(\Bitrix\Sale\Shipment $shipment)
 	{
+		$this->shipment = $shipment;
 		$result = new CalculationResult();
 		$price = floatval($this->config["MAIN"]["PRICE"]);
 		$weight = ceil(floatval($shipment->getWeight()) / 1000);
