@@ -25,14 +25,15 @@ class PskHandler extends Base
 			"filter" => array("CITY" => $cityName),
 		));
 		if ($arDest = $rsDest->Fetch())
-			return "до " . $arDest["PERIOD"] . " дней";
+			$p = $arDest["PERIOD"] + 6;
+			return "до " . $p . " дней";
 
 		return "";
 	}
 
 	public static function getClassDescription()
 	{
-		return "Доставка, стоимость которой зависит только от веса и местоволожения";
+		return "Доставка, стоимость которой зависит только от веса и местоположения";
 	}
 
 	protected function getCity($shipment) {
@@ -66,34 +67,34 @@ class PskHandler extends Base
 			}
 		}
 
-		// name to translit
-		$trnParams = array("replace_space"=>"-","replace_other"=>"-");
-		$cityName = ($cityName ? \CUtil::translit($cityName,"ru",$arParams) : "");
 
-		if ($cityName == "")
-			return false;
 
 		// get city name
-		/* $order = $shipment->getCollection()->getOrder(); // заказ
+		$order = $shipment->getCollection()->getOrder(); // заказ
 		$props = $order->getPropertyCollection(); 
 		$locationCode = $props->getDeliveryLocation()->getValue(); 
 		$rsLoc = \Bitrix\Sale\Location\LocationTable::getByCode($locationCode);
 		$arLoc = $rsLoc->Fetch();
 		$rsLocName = \Bitrix\Sale\Location\Name\LocationTable::getList(array(
-			"filter" => array("LOCATION_ID" => $arLoc["ID"], "LANGUAGE_ID" => "en"),
+			"filter" => array("LOCATION_ID" => $arLoc["ID"], "LANGUAGE_ID" => "ru"),
 		));
 		if ($arLocName = $rsLocName->fetch())
-			$cityName = $arLocName["NAME"]; */
+			$cityName = $arLocName["NAME"];
 
+		// translit name
+		$trnParams = array("replace_space"=>"-","replace_other"=>"-");
+		$cityName = ($cityName ? \CUtil::translit($cityName,"ru",$arParams) : "");
+
+		if ($cityName == "")
+			return false;
+		
 		// get zone
 		$zone = false;
 		$rsDest = PskDestinationsTable::getList(array(
 			"filter" => array("CITY" => $cityName),
 		));
 		if ($arDest = $rsDest->Fetch())
-		{
 			$zone = $arDest["ZONE"];
-		}
 
 		// get price euro
 		$priceEuro = false;
