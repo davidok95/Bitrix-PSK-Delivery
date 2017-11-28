@@ -67,12 +67,12 @@ class PskHandler extends Base
 			}
 		}
 
-
-
 		// get city name
 		$order = $shipment->getCollection()->getOrder(); // заказ
 		$props = $order->getPropertyCollection(); 
 		$locationCode = $props->getDeliveryLocation()->getValue(); 
+		if ( ! $locationCode)
+			return false;
 		$rsLoc = \Bitrix\Sale\Location\LocationTable::getByCode($locationCode);
 		$arLoc = $rsLoc->Fetch();
 		$rsLocName = \Bitrix\Sale\Location\Name\LocationTable::getList(array(
